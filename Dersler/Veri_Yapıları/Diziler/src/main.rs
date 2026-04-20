@@ -5,6 +5,7 @@ fn arrays(){
     println!("{}", a[0]);    
     println!("a - b:{}",a.len() - b.len());
     println!("a + b:{}",a.len() + b.len());
+    println("a dizisi {} elemana sahiptir ve ilk elemeanı: {}", a.len(), a[0]);
 }
 
 fn main() {
