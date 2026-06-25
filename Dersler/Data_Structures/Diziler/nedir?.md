@@ -1,17 +1,17 @@
-Rust'ta **Array (Dizi)**, aynı veri tipindeki elemanları bir arada tutan, **sabit uzunluğa (fixed-length)** sahip ve bellekte **kesintisiz (contiguous)** olarak saklanan temel bir veri koleksiyonudur.
+ 'ta **Array (Dizi)**, aynı veri tipindeki elemanları bir arada tutan, **sabit uzunluğa (fixed-length)** sahip ve bellekte **kesintisiz (contiguous)** olarak saklanan temel bir veri koleksiyonudur.
 
-Rust'ta en çok karıştırılan konulardan biri Array ve Vector (`Vec`) farkıdır. Array'lerin en belirgin özelliği, bir kez oluşturulduklarında **boyutlarının asla değişememesidir**.
+ 'ta en çok karıştırılan konulardan biri Array ve Vector (`Vec`) farkıdır. Array'lerin en belirgin özelliği, bir kez oluşturulduklarında **boyutlarının asla değişememesidir**.
 
-İşte Rust Array yapısının detaylı anlatımı:
+İşte   Array yapısının detaylı anlatımı:
 
 ---
 
 ### 1. Array Oluşturma ve Tanımlama
-Array oluştururken köşeli parantez `[]` kullanılır. Rust tipleri otomatik algılayabilir ancak açıkça belirtmek de mümkündür.
+Array oluştururken köşeli parantez `[]` kullanılır.   tipleri otomatik algılayabilir ancak açıkça belirtmek de mümkündür.
 
-```rust
+``` 
 fn main() {
-    // 1. Tip belirtilmeden (Rust otomatik algılar: [i32; 3])
+    // 1. Tip belirtilmeden (  otomatik algılar: [i32; 3])
     let sayilar = [1, 2, 3];
 
     // 2. Tip ve uzunluk açıkça belirtilerek
@@ -32,7 +32,7 @@ fn main() {
 ### 2. Elemanlara Erişim ve Değiştirme
 Elemanlara erişmek için `indeks` kullanılır. İndeksler `0`'dan başlar. Diziyi değiştirmek istiyorsanız `mut` (mutable) anahtar kelimesini kullanmalısınız.
 
-```rust
+``` 
 fn main() {
     let mut haftanin_gunleri = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
 
@@ -43,18 +43,18 @@ fn main() {
     haftanin_gunleri[2] = "Çarşamba"; 
 
     // ⚠️ SINIR KONTROLÜ (Bounds Checking)
-    // Rust, indeksin dizi sınırları içinde olup olmadığını kontrol eder.
+    //  , indeksin dizi sınırları içinde olup olmadığını kontrol eder.
     // println!("{}", haftanin_gunleri[10]); // ❌ PANIC! Program çöker.
 }
 ```
-*💡 Not: Rust, sınırları hem derleme zamanında (mümkünse) hem de çalışma zamanında (runtime) kontrol eder. Geçersiz bir indeks erişimi programı `panic!` ile durdurur, bu da bellek güvenliğini (memory safety) sağlar.*
+*💡 Not:  , sınırları hem derleme zamanında (mümkünse) hem de çalışma zamanında (runtime) kontrol eder. Geçersiz bir indeks erişimi programı `panic!` ile durdurur, bu da bellek güvenliğini (memory safety) sağlar.*
 
 ---
 
 ### 3. Döngülerle Kullanım (Iteration)
 Array elemanları üzerinde döngüyle gezmek için `for` döngüsü kullanılır.
 
-```rust
+``` 
 fn main() {
     let sayilar = [10, 20, 30, 40, 50];
 
@@ -77,7 +77,7 @@ fn main() {
 ---
 
 ### 4. Array vs Vec (Vector) Karşılaştırması
-Bu, Rust'ta en kritik kararlardan biridir.
+Bu,  'ta en kritik kararlardan biridir.
 
 | Özellik | Array (Dizi) `[T; N]` | Vec (Vektör) `Vec<T>` |
 | :--- | :--- | :--- |
@@ -92,7 +92,7 @@ Bu, Rust'ta en kritik kararlardan biridir.
 ### 5. Sık Kullanılan Faydalı Metodlar
 Array'ler (ve Slice'lar) üzerinde kullanabileceğiniz birçok hazır metod bulunur:
 
-```rust
+``` 
 fn main() {
     let meyveler = ["Elma", "Armut", "Muz", "Çilek"];
 
@@ -127,9 +127,9 @@ Stack bellek boyutu sınırlıdır (genellikle birkaç MB). Eğer çok büyük b
 ---
 
 ### 7. İleri Seviye: Array'leri Fonksiyonlara Geçirmek
-Bir fonksiyona Array geçerken, eğer fonksiyonun her boyuttaki Array'i kabul etmesini istiyorsanız **Slice (`&[T]`)** kullanmalısınız. Çünkü `[i32; 3]` ile `[i32; 5]` Rust için **farklı tiplerdir**.
+Bir fonksiyona Array geçerken, eğer fonksiyonun her boyuttaki Array'i kabul etmesini istiyorsanız **Slice (`&[T]`)** kullanmalısınız. Çünkü `[i32; 3]` ile `[i32; 5]`   için **farklı tiplerdir**.
 
-```rust
+``` 
 // ❌ Sadece tam olarak 3 elemanlı i32 array'lerini kabul eder.
 fn sadece_ucluk_dizi_al(dizi: [i32; 3]) { ... }
 
@@ -153,4 +153,4 @@ fn main() {
 1. **Sabit Boyut Kuralı:** Eğer veri kümenizin boyutu program çalışırken asla değişmeyecekse (örn. bir oyunun başlangıç koordinatları `[x, y]`, bir RGB rengi `[r, g, b]`), kesinlikle **Array** kullanın.
 2. **Hız Odaklılık:** Array'ler Stack'te olduğu için `Vec`'lerden daha hızlıdır. Kritik performans gerektiren küçük döngülerde Array tercih edin.
 3. **Kolay Başlatma:** `[değer; adet]` sözdizimi (örn. `[0.0; 100]`) bir diziyi hızlıca sıfırlamak veya başlatmak için harikadır.
-4. **Güvenlik:** Rust'ın indeks sınır kontrolü (bounds checking) sayesinde, C/C++'taki gibi "Out of Bounds" (sınır dışı) okuma/yazma yaparak güvenlik açıkları yaratmanız imkansızdır.
+4. **Güvenlik:**  'ın indeks sınır kontrolü (bounds checking) sayesinde, C/C++'taki gibi "Out of Bounds" (sınır dışı) okuma/yazma yaparak güvenlik açıkları yaratmanız imkansızdır.

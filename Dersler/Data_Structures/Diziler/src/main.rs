@@ -1,4 +1,4 @@
-use std::mem; // Rust'ta bellek yönetimi için kullanılan bir moddur. Dizilerin bellek kullanımını incelemek için kullanılır.
+use std::mem; //  'ta bellek yönetimi için kullanılan bir moddur. Dizilerin bellek kullanımını incelemek için kullanılır.
 
 fn arrays() {
     let a: [i32; 5] = [1, 2, 3, 4, 5];

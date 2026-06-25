@@ -1,8 +1,8 @@
-Rust'ta Python'daki (NumPy) veya MATLAB'daki gibi doğrudan dil içine gömülü, birinci sınıf (first-class) bir **Matris** veri tipi **yoktur**. 
+ 'ta Python'daki (NumPy) veya MATLAB'daki gibi doğrudan dil içine gömülü, birinci sınıf (first-class) bir **Matris** veri tipi **yoktur**. 
 
-Ancak bu, Rust'ta matrislerle çalışamayacağınız anlamına gelmez. Rust'ta matrisleri temsil etmenin ve işlemenin **4 farklı yolu** vardır. Hangi yolu seçeceğiniz, matrisin boyutunun ne zaman belli olduğuna ve performans gereksinimlerinize bağlıdır.
+Ancak bu,  'ta matrislerle çalışamayacağınız anlamına gelmez.  'ta matrisleri temsil etmenin ve işlemenin **4 farklı yolu** vardır. Hangi yolu seçeceğiniz, matrisin boyutunun ne zaman belli olduğuna ve performans gereksinimlerinize bağlıdır.
 
-İşte Rust'ta matrislerin detaylı anlatımı:
+İşte  'ta matrislerin detaylı anlatımı:
 
 ---
 
@@ -11,7 +11,7 @@ Eğer matrisinizin boyutları **derleme zamanında (compile-time) kesin olarak b
 
 Sözdizimi: `[[Tür; Sütun_Sayısı]; Satır_Sayısı]`
 
-```rust
+``` 
 fn main() {
     // 2 satırlı ve 3 sütunlu bir matris (Türü: i32)
     let matris: [[i32; 3]; 2] = [
@@ -34,7 +34,7 @@ fn main() {
 ### 2. İç İçe Vektörler (Nested Vectors) - `Vec<Vec<T>>`
 Eğer matrisinizin boyutları **çalışma zamanında (runtime) belli olacaksa** (örneğin kullanıcıdan alınacaksa veya bir dosyadan okunacaksa) iç içe vektörler kullanılır.
 
-```rust
+``` 
 fn main() {
     let satir_sayisi = 2;
     let sutun_sayisi = 3;
@@ -59,7 +59,7 @@ Eğer harici kütüphane kullanmak istemiyor ama iç içe vektörlerin performan
 
 Formül: `indeks = (satir * toplam_sutun) + sutun`
 
-```rust
+``` 
 struct Matris {
     veri: Vec<f64>,
     satir: usize,
@@ -98,7 +98,7 @@ fn main() {
 ---
 
 ### 4. Harici Kütüphaneler (Crates) - *Gerçek Çözüm*
-Rust'ta ciddi matematiksel işlemler (matris çarpımı, invers, özdeğerler, lineer cebir) yapacaksanız, tekerleği yeniden icat etmek yerine ekosistemdeki endüstri standardı kütüphaneleri kullanmalısınız. En popüler ikisi:
+ 'ta ciddi matematiksel işlemler (matris çarpımı, invers, özdeğerler, lineer cebir) yapacaksanız, tekerleği yeniden icat etmek yerine ekosistemdeki endüstri standardı kütüphaneleri kullanmalısınız. En popüler ikisi:
 
 #### A. `ndarray` (NumPy benzeri, N-boyutlu diziler)
 Daha çok veri bilimi ve genel N-boyutlu matris işlemleri için kullanılır.
@@ -109,7 +109,7 @@ Daha çok veri bilimi ve genel N-boyutlu matris işlemleri için kullanılır.
 ndarray = "0.15"
 ```
 
-```rust
+``` 
 use ndarray::array;
 
 fn main() {
@@ -136,7 +136,7 @@ Oyun geliştirme, fizik motorları ve katı lineer cebir işlemleri için kullan
 nalgebra = "0.32"
 ```
 
-```rust
+``` 
 use nalgebra::{Matrix2, Vector2};
 
 fn main() {
@@ -174,5 +174,5 @@ fn main() {
 ### Özet ve İpuçları
 1. **Standart Kütüphane ile Sınırlıysanız:** Boyut belliyse `[[T; N]; M]`, dinamikse tek boyutlu `Vec<T>` kullanıp indeks formülü uygulayın. `Vec<Vec<T>>` kullanımından kaçının.
 2. **Matris Çarpımı Yapacaksanız:** Asla manuel iç içe döngüler (`for` içinde `for`) yazmaya çalışmayın. Hata yapmaya çok müsaittir ve optimize edilmemiştir. Doğrudan `nalgebra` veya `ndarray` crate'lerini `Cargo.toml`'a ekleyin.
-3. **Oyun Geliştirme (GameDev):** Eğer Rust ile oyun yapıyorsanız, `nalgebra` veya `glam` kütüphaneleri vektör ve matris işlemleri (özellikle 3D uzayda dönüşümler) için vazgeçilmezdir.
-4. **Bellek Düzeni (Memory Layout):** Matrislerde "Row-major" (Satır öncelikli - C/Rust/NumPy) ve "Column-major" (Sütun öncelikli - Fortran/MATLAB) kavramları vardır. Rust ve `ndarray` varsayılan olarak **Row-major** kullanır. Harici bir C/C++ kütüphanesiyle (FFI) veri alışverişi yaparken bu sıralamaya dikkat etmelisiniz.
+3. **Oyun Geliştirme (GameDev):** Eğer   ile oyun yapıyorsanız, `nalgebra` veya `glam` kütüphaneleri vektör ve matris işlemleri (özellikle 3D uzayda dönüşümler) için vazgeçilmezdir.
+4. **Bellek Düzeni (Memory Layout):** Matrislerde "Row-major" (Satır öncelikli - C/ /NumPy) ve "Column-major" (Sütun öncelikli - Fortran/MATLAB) kavramları vardır.   ve `ndarray` varsayılan olarak **Row-major** kullanır. Harici bir C/C++ kütüphanesiyle (FFI) veri alışverişi yaparken bu sıralamaya dikkat etmelisiniz.

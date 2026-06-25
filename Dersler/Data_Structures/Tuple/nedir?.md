@@ -1,17 +1,17 @@
-Rust'ta **Tuple** (Türkçesiyle *Demet*), farklı veri tiplerindeki değerleri tek bir değişken altında toplayan, **sabit uzunluğa** sahip bir veri yapısıdır. 
+ 'ta **Tuple** (Türkçesiyle *Demet*), farklı veri tiplerindeki değerleri tek bir değişken altında toplayan, **sabit uzunluğa** sahip bir veri yapısıdır. 
 
-Tuple'lar, birden fazla farklı tipte veriyi bir arada tutmak ve özellikle **fonksiyonlardan birden fazla değer döndürmek** için Rust'ta çok sık kullanılır.
+Tuple'lar, birden fazla farklı tipte veriyi bir arada tutmak ve özellikle **fonksiyonlardan birden fazla değer döndürmek** için  'ta çok sık kullanılır.
 
-İşte Rust Tuple'larının detaylı anlatımı:
+İşte   Tuple'larının detaylı anlatımı:
 
 ---
 
 ### 1. Tuple Oluşturma ve Tanımlama
-Bir tuple oluşturmak için değerleri parantez `()` içine alıp virgülle ayırmanız yeterlidir. Rust, tipleri otomatik olarak algılayabilir (type inference) ancak isterseniz açıkça da belirtebilirsiniz.
+Bir tuple oluşturmak için değerleri parantez `()` içine alıp virgülle ayırmanız yeterlidir.  , tipleri otomatik olarak algılayabilir (type inference) ancak isterseniz açıkça da belirtebilirsiniz.
 
-```rust
+``` 
 fn main() {
-    // Tip belirtilmeden (Rust otomatik algılar)
+    // Tip belirtilmeden (  otomatik algılar)
     let tup1 = (500, 6.4, true, "Merhaba");
 
     // Tipler açıkça belirtilerek
@@ -28,7 +28,7 @@ Tuple içindeki verilere erişmenin **iki temel yolu** vardır:
 #### A. Nokta (Dot) Notasyonu ile İndeksleme
 Array'lerin (dizilerin) aksine, tuple'larda köşeli parantez `[]` değil, **nokta `.`** kullanılır. İndeksler `0`'dan başlar.
 
-```rust
+``` 
 fn main() {
     let tup: (i32, f64, u8) = (500, 6.4, 1);
 
@@ -39,12 +39,12 @@ fn main() {
     println!("x: {}, y: {}, z: {}", x, y, z);
 }
 ```
-*⚠️ Önemli Not: `tup[0]` yazarsanız Rust derleme hatası (compile error) verir.*
+*⚠️ Önemli Not: `tup[0]` yazarsanız   derleme hatası (compile error) verir.*
 
 #### B. Yapı Bozma (Destructuring)
 Tuple'ı tek seferde parçalarına ayırarak yeni değişkenlere atamak için "pattern matching" (desen eşleştirme) yapısını kullanabilirsiniz. Buna **Destructuring** denir.
 
-```rust
+``` 
 fn main() {
     let tup = (500, 6.4, 1);
 
@@ -58,7 +58,7 @@ fn main() {
 ```
 
 Eğer tuple'ın sadece belirli bir elemanına ihtiyacınız varsa, diğerlerini `_` (underscore) ile yok sayabilirsiniz:
-```rust
+``` 
 let (x, _, z) = (10, 20, 30); // y (20) kullanılmadı.
 ```
 
@@ -66,16 +66,16 @@ let (x, _, z) = (10, 20, 30); // y (20) kullanılmadı.
 
 ### 3. Boş Tuple ve Unit Tipi `()`
 Hiçbir değer içermeyen, uzunluğu sıfır olan tuple'a **Unit Tuple** denir ve `()` şeklinde gösterilir. 
-Rust'ta bir fonksiyon açıkça bir değer döndürmüyorsa, arka planda `()` (Unit tipi) döndürür. Bu, diğer dillerdeki `void` kavramının Rust'taki karşılığıdır.
+ 'ta bir fonksiyon açıkça bir değer döndürmüyorsa, arka planda `()` (Unit tipi) döndürür. Bu, diğer dillerdeki `void` kavramının  'taki karşılığıdır.
 
-```rust
+``` 
 fn bir_sey_yap() -> () {
     println!("Bu fonksiyon bir şey döndürmez.");
 }
 
 // Aslında yukarıdaki fonksiyon şununla tamamen aynıdır:
 fn bir_sey_yap2() {
-    println!("Tip belirtilmediğinde Rust otomatik olarak () döndürür.");
+    println!("Tip belirtilmediğinde   otomatik olarak () döndürür.");
 }
 
 fn main() {
@@ -88,9 +88,9 @@ fn main() {
 ### 4. Neden Tuple Kullanırız? (Kullanım Alanları)
 
 #### A. Fonksiyonlardan Birden Fazla Değer Döndürmek
-Rust'ta (Python'daki gibi) bir fonksiyondan birden fazla değer döndürmenin en zarif yolu tuple kullanmaktır.
+ 'ta (Python'daki gibi) bir fonksiyondan birden fazla değer döndürmenin en zarif yolu tuple kullanmaktır.
 
-```rust
+``` 
 fn kullanici_bilgisi_al() -> (String, i32) {
     let isim = String::from("Ahmet");
     let yas = 28;
@@ -106,7 +106,7 @@ fn main() {
 #### B. Pattern Matching (Desen Eşleştirme)
 `match` ifadelerinde birden fazla koşulu aynı anda kontrol etmek için tuple'lar harikadır.
 
-```rust
+``` 
 fn main() {
     let koordinat = (0, 5);
 
@@ -122,9 +122,9 @@ fn main() {
 ---
 
 ### 5. Tuple Struct (Tuple Yapıları)
-Rust'ta isimleri olmayan ama bir isme sahip olan tuple yapıları tanımlayabilirsiniz. Bu, struct (yapı) ile tuple'ın birleşimidir. Genellikle "Newtype" pattern'i oluşturmak için kullanılır.
+ 'ta isimleri olmayan ama bir isme sahip olan tuple yapıları tanımlayabilirsiniz. Bu, struct (yapı) ile tuple'ın birleşimidir. Genellikle "Newtype" pattern'i oluşturmak için kullanılır.
 
-```rust
+``` 
 // Renk isminde bir Tuple Struct tanımladık
 struct Renk(i32, i32, i32);
 struct Nokta(i32, i32, i32);

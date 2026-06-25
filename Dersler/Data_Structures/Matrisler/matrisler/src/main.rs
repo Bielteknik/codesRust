@@ -1,7 +1,7 @@
 /*
 /// Matrisler Öğrenici Notları;///
 
-Öğrenici Açıklaması: Bu kod, Rust'ta iki boyutlu dizilerin (matrislerin) temel işlemlerini gösterir:
+Öğrenici Açıklaması: Bu kod,  'ta iki boyutlu dizilerin (matrislerin) temel işlemlerini gösterir:
 
     [[f32; 3]; 3] syntax'ı 3x3'luk bir f32 matrisi tanımlar
     mtx.len() dış boyut (satır sayısını) verir

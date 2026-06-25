@@ -16,7 +16,7 @@ enum Color {
 } 
 //enum'ler birden fazla türü tek bir tür altında tanımlamamızı sağlar. 
 //enum'lar genellikle birbirleriyle ilişkili değerleri gruplamak için kullanılır. 
-//enum'lar, Rust'ta güçlü bir şekilde tiplenmiş veri yapılarıdır ve genellikle match ifadeleriyle birlikte kullanılır.
+//enum'lar,  'ta güçlü bir şekilde tiplenmiş veri yapılarıdır ve genellikle match ifadeleriyle birlikte kullanılır.
 
 fn enums() {
     //let c = Color::Blue;

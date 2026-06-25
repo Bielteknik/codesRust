@@ -11,9 +11,9 @@ Graph → Grafik
 
 Bu terimler genelde "Data Structures and Algorithms" (Veri Yapıları ve Algoritmalar) başlığı altında öğretilir.
 
-Rust'ta **Veri Yapıları (Data Structures)**, verileri organize etmenin, depolamanın ve verimli bir şekilde erişmenin yollarını sağlar. Rust'ın standart kütüphanesi bazı veri yapılarını doğrudan sunarken, bazılarını kendiniz implemente etmeniz veya harici kütüphaneler kullanmanız gerekir.
+ 'ta **Veri Yapıları (Data Structures)**, verileri organize etmenin, depolamanın ve verimli bir şekilde erişmenin yollarını sağlar.  'ın standart kütüphanesi bazı veri yapılarını doğrudan sunarken, bazılarını kendiniz implemente etmeniz veya harici kütüphaneler kullanmanız gerekir.
 
-İşte Rust'ta temel veri yapılarının detaylı anlatımı:
+İşte  'ta temel veri yapılarının detaylı anlatımı:
 
 ---
 
@@ -22,17 +22,17 @@ Rust'ta **Veri Yapıları (Data Structures)**, verileri organize etmenin, depola
 ### Nedir?
 Linked List, her bir elemanın (node) hem veriyi hem de bir sonraki elemana işaretçi (pointer) tuttuğu doğrusal bir veri yapısıdır. Array'lerin aksine bellekte kesintisiz olmak zorunda değildir.
 
-### Rust'ta Durum
-⚠️ **Önemli:** Rust'ın standart kütüphanesinde `LinkedList` tipi **vardır** ancak **neredeyse hiç kullanılmaz**. Çünkü:
+###  'ta Durum
+⚠️ **Önemli:**  'ın standart kütüphanesinde `LinkedList` tipi **vardır** ancak **neredeyse hiç kullanılmaz**. Çünkü:
 - Cache dostu değildir (bellekte dağınıktır)
 - Her eleman için ayrı heap tahsisi gerekir
 - `Vec` genellikle daha hızlıdır
 
-Ancak öğrenme amaçlı implemente etmek Rust'ın ownership ve borrowing kavramlarını anlamak için mükemmeldir.
+Ancak öğrenme amaçlı implemente etmek  'ın ownership ve borrowing kavramlarını anlamak için mükemmeldir.
 
 ### Manuel Implementasyon (Tek Yönlü)
 
-```rust
+``` 
 use std::fmt;
 
 // Node yapısı
@@ -102,12 +102,12 @@ fn main() {
 ### Nedir?
 **LIFO (Last In, First Out)** prensibiyle çalışan veri yapısıdır. Son eklenen eleman ilk çıkar.
 
-### Rust'ta Durum
-Rust'ta **ayrı bir Stack tipi yoktur**. Bunun yerine `Vec` kullanılır çünkü `Vec`'in `push()` ve `pop()` metodları tam olarak stack davranışı gösterir.
+###  'ta Durum
+ 'ta **ayrı bir Stack tipi yoktur**. Bunun yerine `Vec` kullanılır çünkü `Vec`'in `push()` ve `pop()` metodları tam olarak stack davranışı gösterir.
 
 ### Vec ile Stack Kullanımı
 
-```rust
+``` 
 fn main() {
     let mut stack = Vec::new();
 
@@ -145,12 +145,12 @@ fn main() {
 ### Nedir?
 **FIFO (First In, First Out)** prensibiyle çalışan veri yapısıdır. İlk eklenen eleman ilk çıkar.
 
-### Rust'ta Durum
-Rust'ın standart kütüphanesinde **`VecDeque`** (Vector Double-Ended Queue) vardır ve queue olarak kullanılır. `Vec`'in `pop_front()` metodu olmadığı için `VecDeque` tercih edilir.
+###  'ta Durum
+ 'ın standart kütüphanesinde **`VecDeque`** (Vector Double-Ended Queue) vardır ve queue olarak kullanılır. `Vec`'in `pop_front()` metodu olmadığı için `VecDeque` tercih edilir.
 
 ### VecDeque ile Queue Kullanımı
 
-```rust
+``` 
 use std::collections::VecDeque;
 
 fn main() {
@@ -194,12 +194,12 @@ fn main() {
 ### Nedir?
 Anahtar-değer (key-value) çiftlerini saklayan, **O(1)** ortalama erişim süresi sunan veri yapısıdır.
 
-### Rust'ta Durum
-Rust'ın standart kütüphanesinde **`HashMap`** vardır ve çok güçlüdür. Anahtar tipi `Hash` ve `Eq` trait'lerini implemente etmelidir.
+###  'ta Durum
+ 'ın standart kütüphanesinde **`HashMap`** vardır ve çok güçlüdür. Anahtar tipi `Hash` ve `Eq` trait'lerini implemente etmelidir.
 
 ### HashMap Kullanımı
 
-```rust
+``` 
 use std::collections::HashMap;
 
 fn main() {
@@ -238,12 +238,12 @@ fn main() {
 
 ### Gelişmiş Özellikler
 
-```rust
+``` 
 use std::collections::HashMap;
 
 fn main() {
     let mut kelime_sayaci = HashMap::new();
-    let metin = "merhaba dünya merhaba rust merhaba";
+    let metin = "merhaba dünya merhaba   merhaba";
 
     // Kelime sayacı (Frequency counter)
     for kelime in metin.split_whitespace() {
@@ -252,7 +252,7 @@ fn main() {
     }
 
     println!("{:?}", kelime_sayaci);
-    // {"merhaba": 3, "dünya": 1, "rust": 1}
+    // {"merhaba": 3, "dünya": 1, " ": 1}
 
     // Vec değerleri (Bir anahtara birden fazla değer)
     let mut gruplar = HashMap::new();
@@ -278,12 +278,12 @@ fn main() {
 ### Nedir?
 Hiyerarşik bir veri yapısıdır. Her node bir veri ve çocuk node'lara (children) sahiptir. En yaygın türü **Binary Tree** (İkili Ağaç) ve **Binary Search Tree (BST)**'dir.
 
-### Rust'ta Durum
+###  'ta Durum
 Standart kütüphanede **Tree yapısı yoktur**. Kendiniz implemente etmeniz veya harici kütüphane kullanmanız gerekir.
 
 ### Binary Search Tree (BST) Implementasyonu
 
-```rust
+``` 
 use std::cmp::Ordering;
 
 #[derive(Debug)]
@@ -397,14 +397,14 @@ fn main() {
 ### Nedir?
 Node'lar (vertices) ve bunları bağlayan edge'lerden oluşan non-linear veri yapısıdır. Sosyal ağlar, haritalar, internet gibi ilişkisel verileri modellemek için kullanılır.
 
-### Rust'ta Durum
+###  'ta Durum
 Standart kütüphanede **Graph yapısı yoktur**. İki şekilde implemente edebilirsiniz:
 1. Adjacency List (Komşuluk Listesi) - HashMap ile
 2. `petgraph` kütüphanesi ile
 
 ### Adjacency List ile Graph Implementasyonu
 
-```rust
+``` 
 use std::collections::{HashMap, HashSet};
 
 #[derive(Debug)]
@@ -487,7 +487,7 @@ fn main() {
 petgraph = "0.6"
 ```
 
-```rust
+``` 
 use petgraph::graph::UnGraph;
 use petgraph::visit::Bfs;
 
@@ -526,7 +526,7 @@ fn main() {
 
 ## Karşılaştırma Tablosu
 
-| Veri Yapısı | Rust'ta Karşılığı | Ekleme | Arama | Silme | Kullanım Yeri |
+| Veri Yapısı |  'ta Karşılığı | Ekleme | Arama | Silme | Kullanım Yeri |
 |:---|:---|:---|:---|:---|:---|
 | **Linked List** | `LinkedList` (nadiren kullanılır) | O(1) | O(n) | O(1) | Sık ekleme/çıkarma, indeksleme gerekmez |
 | **Stack** | `Vec` (push/pop) | O(1) | O(n) | O(1) | LIFO gerektiren işlemler |
@@ -541,7 +541,7 @@ fn main() {
 
 ## Özet ve İpuçları
 
-1. **Vec Her Şeydir:** Rust'ta çoğu zaman `Vec` yeterli olur. Stack, Queue, hatta basit Linked List ihtiyaçlarınız için `Vec` kullanın.
+1. **Vec Her Şeydir:**  'ta çoğu zaman `Vec` yeterli olur. Stack, Queue, hatta basit Linked List ihtiyaçlarınız için `Vec` kullanın.
 
 2. **HashMap Varsayılan Seçiminiz Olsun:** Anahtar-değer eşleştirmesi gerekiyorsa, sıralama önemli değilse `HashMap` kullanın.
 
@@ -549,8 +549,8 @@ fn main() {
 
 4. **Graph için petgraph:** Ciddi graph işlemleri için kendi implementasyonunuz yerine `petgraph` kütüphanesini kullanın.
 
-5. **Linked List'ten Kaçının:** Rust'ta `LinkedList` neredeyse hiç kullanılmaz. `Vec` veya `VecDeque` genellikle daha performanslıdır.
+5. **Linked List'ten Kaçının:**  'ta `LinkedList` neredeyse hiç kullanılmaz. `Vec` veya `VecDeque` genellikle daha performanslıdır.
 
-6. **Ownership'a Dikkat:** Tree ve Graph implementasyonlarında Rust'ın ownership kuralları nedeniyle `Rc<RefCell<T>>` veya `Box` kullanmanız gerekebilir. Bu, Rust'ta veri yapıları implement etmenin en zor kısmıdır.
+6. **Ownership'a Dikkat:** Tree ve Graph implementasyonlarında  'ın ownership kuralları nedeniyle `Rc<RefCell<T>>` veya `Box` kullanmanız gerekebilir. Bu,  'ta veri yapıları implement etmenin en zor kısmıdır.
 
-7. **Harici Crate'lerden Korkmayın:** Rust ekosistemi çok zengindir. `petgraph`, `ndarray`, `indexmap` gibi kütüphaneler production-ready'dir ve güvenle kullanılabilir.
+7. **Harici Crate'lerden Korkmayın:**   ekosistemi çok zengindir. `petgraph`, `ndarray`, `indexmap` gibi kütüphaneler production-ready'dir ve güvenle kullanılabilir.
