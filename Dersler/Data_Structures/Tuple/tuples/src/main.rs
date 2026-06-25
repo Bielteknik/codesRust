@@ -1,3 +1,8 @@
+//Nedir
+// Tuple, birden fazla değeri tek bir değişkende saklayan veri yapısıdır.
+// Fonksiyonlardan birden fazla değer döndürmek için kullanılır.
+
+
 fn topla_carp(x : i32, y: i32) -> (i32, i32) {
     (x + y, x * y)
 }
