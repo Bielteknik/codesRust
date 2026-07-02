@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Programlama Master Planı | C & Rust</title>
+    <style>
+        :root {
+            --bg-primary: #09090b;
+            --bg-secondary: #18181b;
+            --bg-tertiary: #27272a;
+            --border: #3f3f46;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent-c: #3b82f6;
+            --accent-rust: #f59e0b;
+            --accent-success: #22c55e;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-sans); background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; display: flex; min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border);
+            padding: 24px 16px; position: fixed; height: 100vh; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .sidebar-header { font-size: 1.25rem; font-weight: 700; margin-bottom: 24px; padding: 0 12px; letter-spacing: -0.025em; }
+        .sidebar-header span { color: var(--text-muted); font-weight: 400; font-size: 0.8rem; display: block; margin-top: 4px;}
+        
+        .nav-item {
+            padding: 10px 12px; border-radius: 6px; cursor: pointer; color: var(--text-secondary);
+            font-size: 0.9rem; font-weight: 500; transition: all 0.2s; display: flex; align-items: center; gap: 10px;
+        }
+        .nav-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+        .nav-item.active { background: var(--bg-tertiary); color: var(--text-primary); border-left: 2px solid var(--accent-rust); }
+        .nav-icon { width: 18px; height: 18px; opacity: 0.7; }
+
+        /* Main Content */
+        .main { margin-left: 280px; flex: 1; padding: 40px; max-width: 1200px; }
+        .page { display: none; animation: fadeIn 0.3s ease-out; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.025em; }
+        h2 { font-size: 1.5rem; font-weight: 600; margin: 32px 0 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+        p, li { color: var(--text-secondary); font-size: 0.95rem; }
+        
+        /* Cards & Grids */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 24px; }
+        
+        /* Progress Bars */
+        .progress-container { margin-bottom: 16px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; color: var(--text-secondary); }
+        .progress-bar { height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+        .fill-c { background: var(--accent-c); }
+        .fill-rust { background: var(--accent-rust); }
+
+        /* Roadmap Accordion */
+        .week-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
+        .week-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+        .week-header:hover { background: var(--bg-tertiary); }
+        .week-content { display: none; padding: 0 20px 20px; border-top: 1px solid var(--border); }
+        .week-content.open { display: block; }
+        .week-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }
+        .lang-col h4 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+        .lang-col.c h4 { color: var(--accent-c); }
+        .lang-col.rust h4 { color: var(--accent-rust); }
+        .lang-col ul { list-style: none; padding: 0; }
+        .lang-col li { font-size: 0.85rem; color: var(--text-secondary); padding: 4px 0; padding-left: 16px; position: relative; }
+        .lang-col li::before { content: "›"; position: absolute; left: 0; color: var(--text-muted); }
+        .project-box { background: var(--bg-primary); border: 1px dashed var(--border); padding: 12px; border-radius: 6px; margin-top: 16px; font-size: 0.85rem; }
+        .project-box strong { color: var(--accent-success); }
+
+        /* Handbook / Code Blocks */
+        .code-comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+        pre { background: #000; border: 1px solid var(--border); border-radius: 6px; padding: 16px; font-family: var(--font-mono); font-size: 0.8rem; overflow-x: auto; line-height: 1.5; color: #e4e4e7; }
+        .code-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em; }
+        .code-label.c { color: var(--accent-c); }
+        .code-label.rust { color: var(--accent-rust); }
+
+        /* Notebook */
+        .notebook-area { width: 100%; height: 60vh; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 8px; padding: 20px; color: var(--text-primary); font-family: var(--font-mono); font-size: 0.9rem; resize: none; outline: none; line-height: 1.6; }
+        .notebook-area:focus { border-color: var(--accent-rust); }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar { width: 100%; height: auto; position: relative; flex-direction: row; overflow-x: auto; padding: 12px; }
+            .main { margin-left: 0; padding: 20px; }
+            .grid-2, .week-grid, .code-comparison { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="sidebar">
+    <div class="sidebar-header">
+        SysProg Master Plan
+        <span>C & Rust 24-Week Curriculum</span>
+    </div>
+    <div class="nav-item active" onclick="showPage('overview', this)">Genel Bakış & Metodoloji</div>
+    <div class="nav-item" onclick="showPage('roadmap', this)">24 Haftalık Yol Haritası</div>
+    <div class="nav-item" onclick="showPage('handbook', this)">Derinlemesine Handbook</div>
+    <div class="nav-item" onclick="showPage('projects', this)">Proje Kilometre Taşları</div>
+    <div class="nav-item" onclick="showPage('journal', this)">Mühendislik Günlüğü</div>
+</nav>
+
+<main class="main">
+    <!-- PAGE 1: OVERVIEW -->
+    <div id="overview" class="page active">
+        <h1>Sistem Programlama Master Planı</h1>
+        <p style="margin-bottom: 32px; font-size: 1.1rem; color: var(--text-secondary);">
+            Bu platform, C'nin donanıima yakın, manuel bellek yönetimi felsefesini ve Rust'ın modern, güvenli, ownership tabanlı yaklaşımını aynı anda kavramanız için tasarlanmış ciddi bir mühendislik müfredatıdır.
+        </p>
+
+        <h2>Öğrenme Metodolojisi</h2>
+        <div class="grid-2">
+            <div class="card">
+                <h3 style="color: var(--accent-c); margin-bottom: 12px;">C Yaklaşımı (The Hard Way)</h3>
+                <ul style="padding-left: 20px;">
+                    <li><strong>Kitap:</strong> The C Programming Language (K&R), C Programming: A Modern Approach (King).</li>
+                    <li><strong>Araçlar:</strong> GCC/Clang, Make, GDB (Debugger), Valgrind (Memory Leak detection), AddressSanitizer.</li>
+                    <li><strong>Odak:</strong> Pointer aritmetiği, manuel heap yönetimi (malloc/free), segfault analizi, veri yapılarını sıfırdan yazma.</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3 style="color: var(--accent-rust); margin-bottom: 12px;">Rust Yaklaşımı (The Safe Way)</h3>
+                <ul style="padding-left: 20px;">
+                    <li><strong>Kitap:</strong> The Rust Programming Language (TRPL), Programming Rust (O'Reilly).</li>
+                    <li><strong>Araçlar:</strong> Cargo, rust-analyzer, Clippy, Miri (Undefined behavior detection).</li>
+                    <li><strong>Odak:</strong> Ownership, Borrowing, Lifetimes, Trait sistemi, Concurrency (Fearless concurrency), Unsafe Rust.</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>İlerleme Durumu</h2>
+        <div class="card">
+            <div class="progress-container">
+                <div class="progress-label"><span>C Müfredatı İlerlemesi</span><span id="c-progress-text">0%</span></div>
+                <div class="progress-bar"><div class="progress-fill fill-c" id="c-progress-bar" style="width: 0%"></div></div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-label"><span>Rust Müfredatı İlerlemesi</span><span id="rust-progress-text">0%</span></div>
+                <div class="progress-bar"><div class="progress-fill fill-rust" id="rust-progress-bar" style="width: 0%"></div></div>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 12px;">* İlerleme, Yol Haritası sekmesindeki haftaları tamamladıkça otomatik hesaplanır.</p>
+        </div>
+    </div>
+
+    <!-- PAGE 2: ROADMAP -->
+    <div id="roadmap" class="page">
+        <h1>24 Haftalık Yol Haritası</h1>
+        <p>Her hafta belirli bir konuya odaklanır. Haftayı tamamladığınızda "Tamamlandı" kutusunu işaretleyin.</p>
+        <div id="roadmap-container" style="margin-top: 24px;"></div>
+    </div>
+
+    <!-- PAGE 3: HANDBOOK -->
+    <div id="handbook" class="page">
+        <h1>Derinlemesine Handbook</h1>
+        <p>İki dil arasındaki mimari ve felsefi farkları gösteren ileri seviye karşılaştırmalar.</p>
+
+        <h2>1. Bellek Yönetimi: Stack vs Heap ve Ownership</h2>
+        <div class="code-comparison">
+            <div>
+                <div class="code-label c">C: Manuel Bellek Yönetimi & Dangling Pointers</div>
+<pre>// Belleği manuel ayır, kullan, serbest bırak.
+// Hata yapma lüksün var, bedeli Segfault/Memory Leak.
+void process_data() {
+    int *data = malloc(100 * sizeof(int));
+    if (!data) handle_error();
+
+    data[0] = 42;
+    
+    // free(data) unutulursa: Memory Leak
+    // free(data) sonrası kullanılırsa: Use-After-Free
+    free(data);
+}</pre>
+            </div>
+            <div>
+                <div class="code-label rust">Rust: Ownership & RAII (Drop Trait)</div>
+<pre>// Scope bittiğinde derleyici otomatik temizler.
+// Derleyici hata yapmanızı compile-time'da engeller.
+fn process_data() {
+    // Vec heap'te yaşar, scope sonunda otomatik drop edilir.
+    let mut data = vec![0; 100]; 
+    data[0] = 42;
+    
+    // free() çağrısına gerek yok.
+    // Scope bittiğinde Drop trait tetiklenir.
+} // <-- Bellek burada garanti altında serbest kalır.</pre>
+            </div>
+        </div>
+
+        <h2>2. Eşzamanlılık (Concurrency) ve Veri Yarışı (Data Races)</h2>
+        <div class="code-comparison">
+            <div>
+                <div class="code-label c">C: pthreads & Manuel Senkronizasyon</div>
+<pre>#include &lt;pthread.h&gt;
+
+int counter = 0;
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+
+void* increment(void* arg) {
+    for(int i=0; i&lt;1000; i++) {
+        pthread_mutex_lock(&lock); // Kilitle
+        counter++;                 // Kritik bölge
+        pthread_mutex_unlock(&lock); // Aç
+    }
+    return NULL;
+}
+// Mutex unutulursa: Data Race (Tanımsız Davranış)</pre>
+            </div>
+            <div>
+                <div class="code-label rust">Rust: Fearless Concurrency & Arc/Mutex</div>
+<pre>use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    // Arc: Atomik Referans Sayımı (Thread-safe paylaşım)
+    // Mutex: Karşılıklı Dışlama (İçeriği korur)
+    let counter = Arc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let c = Arc::clone(&counter);
+        handles.push(thread::spawn(move || {
+            let mut num = c.lock().unwrap();
+            *num += 1;
+        }));
+    }
+    // Derleyici, lock almadan veriyi okumanızı engeller.
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 4: PROJECTS -->
+    <div id="projects" class="page">
+        <h1>Proje Kilometre Taşları</h1>
+        <p>Teori pratiğe dönüşmedikçe öğrenilmez. Her ayın sonunda teslim etmeniz gereken mühendislik projeleri.</p>
+        
+        <div class="grid-2">
+            <div class="card">
+                <h3 style="color: var(--accent-c);">Ay 2: Bellek Pool Allocator (C)</h3>
+                <p>Standart `malloc` kullanmadan, önceden ayrılmış büyük bir bellek bloğu üzerinde kendi özel `alloc` ve `free` fonksiyonlarınızı yazın. Linked list kullanarak boş blokları takip edin.</p>
+            </div>
+            <div class="card">
+                <h3 style="color: var(--accent-rust);">Ay 2: Safe Wrapper for C Allocator (Rust)</h3>
+                <p>Ay 2'de C'de yazdığınız allocator'ı Rust'ta `unsafe` bloklar kullanarak sarmalayın (wrap). Rust'ın `std::alloc::GlobalAlloc` trait'ini implemente ederek bunu Rust'ın standart allocator'ı yapın.</p>
+            </div>
+            <div class="card">
+                <h3 style="color: var(--accent-c);">Ay 4: Mini Shell (C)</h3>
+                <p>`fork()`, `exec()`, `wait()` ve pipe (`|`) operatörlerini kullanarak kendi komut satırı arayüzünüzü yazın. Arka plan işlemlerini (&) destekleyin.</p>
+            </div>
+            <div class="card">
+                <h3 style="color: var(--accent-rust);">Ay 4: Async Web Crawler (Rust)</h3>
+                <p>`tokio` ve `reqwest` kullanarak asenkron bir web crawler yazın. URL'leri paralel olarak çekin, HTML'i parse edin (scraper crate) ve yeni linkleri kuyruğa ekleyin.</p>
+            </div>
+            <div class="card">
+                <h3 style="color: var(--accent-c);">Ay 6: HTTP/1.1 Server (C)</h3>
+                <p>Soket programlama (sys/socket.h) kullanarak, çoklu thread'ler (thread pool) ile çalışan, statik dosyaları serve eden bir HTTP sunucusu yazın.</p>
+            </div>
+            <div class="card">
+                <h3 style="color: var(--accent-rust);">Ay 6: FFI Entegrasyonu & CLI Tool (Rust)</h3>
+                <p>C'de yazdığınız HTTP server'ın çekirdek mantığını (veya yüksek performanslı bir C kütüphanesini) Rust'a `bindgen` ile import edin. `clap` kullanarak profesyonel bir CLI tool yazın.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 5: JOURNAL -->
+    <div id="journal" class="page">
+        <h1>Mühendislik Günlüğü (Debug Journal)</h1>
+        <p>Sistem programlamasında karşılaştığınız segfault'ları, lifetime hatalarını ve çözümlerini buraya not alın. Bu, gelecekteki en büyük başvuru kaynağınız olacaktır.</p>
+        <textarea id="journal-area" class="notebook-area" placeholder="[Tarih] - [Konu]
+Örn: 12 Ekim - Rust Lifetime Hatası
+Hata: `borrowed value does not live long enough`
+Çözüm: String'i kopyalamak yerine referansın scope'unu genişlettim veya 'a lifetime ekledim.
+Kod Snippet: ..."></textarea>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Notlarınız tarayıcınızın yerel depolamasında (Local Storage) şifrelenmeden saklanır.</p>
+    </div>
+</main>
+
+<script>
+    // --- NAVIGATION ---
+    function showPage(pageId, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        el.classList.add('active');
+    }
+
+    // --- ROADMAP DATA ---
+    const roadmapData = [
+        {
+            month: "1. Ay: Derleyici, Temeller ve Bellek Mimarisi",
+            weeks: [
+                { w: 1, c: { topic: "GCC/Clang, Makefile, K&R Ch 1-2", tasks: ["Derleyici zinciri (preprocessor, assembler, linker)", "Temel veri tipleri ve boyutları (sizeof)", "Makefile yazımı"], proj: "Makefile ile derlenen çok dosyalı hesap makinesi." }, rust: { topic: "Cargo, rustc, TRPL Ch 1-3", tasks: ["Cargo ekosistemi, bağımlılık yönetimi", "Değişkenler, Mutability, Shadowing", "Scalar ve Compound tipler"] , proj: "Cargo workspace yapısı oluşturma." } },
+                { w: 2, c: { topic: "Pointer'lar ve Adresler", tasks: ["& ve * operatörleri", "Pointer aritmetiği", "NULL pointer kontrolleri"], proj: "Pointer kullanarak dinamik dizi implementasyonu." }, rust: { topic: "Ownership ve Move Semantics", tasks: ["Stack vs Heap", "Ownership kuralları", "Move ve Clone trait'leri"], proj: "Ownership hatalarını çözmek için Rustlings egzersizleri." } },
+                { w: 3, c: { topic: "Diziler, Stringler ve Bellek", tasks: ["Dizi ve pointer eşdeğerliliği", "C-strings (null-terminated)", "string.h fonksiyonları"], proj: "Kendi strlen, strcpy, strcat fonksiyonlarını yazmak." }, rust: { topic: "References, Borrowing ve Slices", tasks: ["&T ve &mut T", "Borrowing kuralları", "String vs &str farkı"], proj: "Slice kullanarak metin işleme fonksiyonları." } },
+                { w: 4, c: { topic: "Fonksiyonlar, Stack Frame ve Recursion", tasks: ["Call by value vs Call by reference", "Stack frame yapısı", "Fonksiyon pointer'ları"], proj: "Callback fonksiyonlar kullanan bir sıralama (sort) kütüphanesi." }, rust: { topic: "Fonksiyonlar, Closures ve Iterators", tasks: ["fn vs closure (Fn, FnMut, FnOnce)", "Iterator trait'ü", "map, filter, collect"], proj: "Closure ve Iterator zincirleri ile veri dönüştürme." } }
+            ]
+        },
+        {
+            month: "2. Ay: Veri Yapıları ve Dinamik Bellek",
+            weeks: [
+                { w: 5, c: { topic: "Structs ve Typedef", tasks: ["Struct tanımlama ve hizalama (padding)", "Typedef kullanımı", "Struct pointer'ları (->)"], proj: "Öğrenci kayıt sistemi (Dinamik dizi ile)." }, rust: { topic: "Structs, Enums ve Pattern Matching", tasks: ["Struct metodları (impl blokları)", "Enums ve Option<T>", "match ve if let"], proj: "Enum kullanarak bir hesap makinesi durumu yönetimi." } },
+                { w: 6, c: { topic: "Dinamik Bellek Yönetimi (Heap)", tasks: ["malloc, calloc, realloc, free", "Memory leaks ve Valgrind kullanımı", "Fragmentasyon kavramı"], proj: "Valgrind ile sızdırılmayan dinamik bir Linked List." }, rust: { topic: "Box<T>, Vec<T> ve Heap Allocators", tasks: ["Box ile heap'e veri atma", "Vec'in arka planda nasıl çalıştığı", "Capacity vs Length"], proj: "Vec kullanarak dinamik bir Stack veri yapısı." } },
+                { w: 7, c: { topic: "İleri Pointer'lar ve Linked Lists", tasks: ["Çift yönlü bağlı liste", "Pointer'ların pointer'ı (**p)", "Bellek havuzları (Memory pools)"], proj: "Generic (void*) kullanarak Bağlı Liste." }, rust: { topic: "Ownership ile Linked List Zorlukları", tasks: ["Rc<T> ve RefCell<T>", "İki yönlü liste neden zordur?", "std::collections::LinkedList iç yapısı"], proj: "Rc<RefCell<Node>> ile kendi Linked List'inizi yazmak." } },
+                { w: 8, c: { topic: "Hata Yönetimi ve errno", tasks: ["Return codes ve errno", "setjmp/longjmp (İleri seviye)", "assert ve ön koşullar"], proj: "Hata kodlarını string'e çeviren bir makro sistemi." }, rust: { topic: "Result<T, E> ve Hata Yönetimi", tasks: ["Result ve Option tipleri", "? operatörü", "Kendi Error tipini yazma (thiserror)"], proj: "Dosya okuma sırasında oluşan hataları ? ile yönetmek." } }
+            ]
+        },
+        {
+            month: "3. Ay: Sistem Programlamaya Giriş ve Dosya I/O",
+            weeks: [
+                { w: 9, c: { topic: "Dosya I/O (POSIX)", tasks: ["file descriptors, open, read, write", "seek ve dosya offset'leri", "Binary vs Text dosyalar"], proj: "Binary formatta veri kaydedip okuyan bir veritabanı dosyası." }, rust: { topic: "std::fs ve std::io", tasks: ["File, Read, Write trait'leri", "BufReader ve BufWriter", "Hata yönetimi ile dosya işlemleri"], proj: "Log dosyasına asenkron yazan bir sistem." } },
+                { w: 10, c: { topic: "Procesler ve fork()", tasks: ["fork, exec, wait", "Parent ve child procesler", "Exit status ve sinyaller"], proj: "Basit bir process spawn eden ve bekleyen program." }, rust: { topic: "Command ve Process Yönetimi", tasks: ["std::process::Command", "Child process stdout/stderr okuma", "Environment variables"], proj: "Sistem komutlarını çalıştırıp çıktısını parse eden CLI." } },
+                { w: 11, c: { topic: "Bellek Düzeni (Memory Layout)", tasks: ["Text, Data, BSS, Heap, Stack segmentleri", "Endianness (Little vs Big)", "Bitwise operatörler ve masking"], proj: "Bir integer'ın byte'larını tek tek ekrana yazdırmak (Endian test)." }, rust: { topic: "Memory Layout ve Layouts", tasks: ["std::alloc::Layout", "repr(C) ve repr(Rust) farkları", "bytemuck ve zero-copy"], proj: "Unsafe kullanarak bir struct'ın byte dizisine dönüşümü." } },
+                { w: 12, c: { topic: "Preprocessor ve Makrolar", tasks: ["#define, #ifdef, #ifndef", "Function-like macros", "Header guard'lar"], proj: "Generic bir swap ve max makrosu yazmak." }, rust: { topic: "Makrolara Giriş (macro_rules!)", tasks: ["Declarative macros", "Token trees", "repeaters (...)"], proj: "Kendi vec! benzeri bir makro yazmak." } }
+            ]
+        },
+        {
+            month: "4. Ay: Concurrency, Thread'ler ve Senkronizasyon",
+            weeks: [
+                { w: 13, c: { topic: "POSIX Threads (pthreads)", tasks: ["pthread_create, pthread_join", "Thread argümanları", "Thread-local storage"], proj: "Matris çarpımı yapan multi-threaded program." }, rust: { topic: "std::thread ve Move Closures", tasks: ["thread::spawn", "move keyword'ü", "thread::join ve panik yönetimi"], proj: "Paralel dosya hash'leyici (SHA256)." } },
+                { w: 14, c: { topic: "Senkronizasyon Primitifleri", tasks: ["Mutexes ve Condition Variables", "Semaphores", "Deadlock önleme"], proj: "Producer-Consumer problemi (pthread ile)." }, rust: { topic: "Arc, Mutex ve Channels", tasks: ["Arc (Atomic Reference Counted)", "mpsc kanalları", "Send ve Sync trait'leri"], proj: "Channel kullanarak asenkron bir iş kuyruğu (Worker pool)." } },
+                { w: 15, c: { topic: "Atomik Operasyonlar ve Lock-free", tasks: ["stdatomic.h", "Memory ordering (basics)", "Compare-and-swap (CAS)"], proj: "Lock-free bir sayaç implementasyonu." }, rust: { topic: "Atomics ve Fearless Concurrency", tasks: ["std::sync::atomic", "Ordering (Relaxed, SeqCst vb.)", "Rust'ın compile-time concurrency garantileri"], proj: "Atomic kullanarak thread-safe bir singleton." } },
+                { w: 16, c: { topic: "Soket Programlamaya Giriş", tasks: ["TCP/IP temelleri", "socket, bind, listen, accept", "Bloking I/O"], proj: "Basit bir Echo TCP Sunucusu ve İstemcisi." }, rust: { topic: "Async/Await Temelleri", tasks: ["Future trait'ü", "async/await söz dizimi", "Tokio runtime'a giriş"], proj: "Tokio ile basit bir async TCP echo sunucusu." } }
+            ]
+        },
+        {
+            month: "5. Ay: İleri Konular, Unsafe ve FFI",
+            weeks: [
+                { w: 17, c: { topic: "İleri Veri Yapıları", tasks: ["Hash Tables (Chaining vs Open Addressing)", "Binary Search Trees", "Trie yapısı"], proj: "Sıfırdan Hash Table implementasyonu." }, rust: { topic: "Trait'ler ve Generic Programlama", tasks: ["Trait bounds", "Associated types", "Dyn vs Impl Trait"], proj: "Generic bir Repository pattern implementasyonu." } },
+                { w: 18, c: { topic: "Undefined Behavior (UB) ve Security", tasks: ["Buffer overflows", "Format string attacks", "Stack smashing"], proj: "Güvenli bir string kütüphanesi yazmak (Bounds checking)." }, rust: { topic: "Unsafe Rust", tasks: ["Raw pointers (*const, *mut)", "Unsafe blokları ve fonksiyonları", "Unsafe neden gerekli?"], proj: "Raw pointer kullanarak kendi Vec<T> implementasyonunuz." } },
+                { w: 19, c: { topic: "Dinamik Kütüphaneler (Shared Objects)", tasks: [".so ve .dll dosyaları", "dlopen, dlsym", "Symbol visibility"], proj: "Runtime'da yüklenen bir eklenti (plugin) sistemi." }, rust: { topic: "FFI (Foreign Function Interface)", tasks: ["extern "C" blokları", "C tip eşleşmeleri (std::os::raw)", "cbindgen kullanımı"], proj: "Rust fonksiyonlarını C'den çağrılabilir hale getirmek." } },
+                { w: 20, c: { topic: "C ve Rust Entegrasyonu", tasks: ["C kodunu Rust'ta kullanma (bindgen)", "Rust kodunu C'de kullanma", "Bellek yönetimi sınırları"], proj: "C'de yazılmış bir math kütüphanesini Rust'ta sarmalamak." }, rust: { topic: "Custom Allocators ve std::alloc", tasks: ["GlobalAlloc trait'ü", "Allocator API (Nightly/Stable)", "Bellek sızıntısı analizi"], proj: "Rust'ın default allocator'ını değiştirmek." } }
+            ]
+        },
+        {
+            month: "6. Ay: Mimari, Test ve Final Projeleri",
+            weeks: [
+                { w: 21, c: { topic: "Profiling ve Optimizasyon", tasks: ["gprof ve perf kullanımı", "Cache locality (Data-oriented design)", "Compiler flags (-O2, -O3, -march)"], proj: "Bir kodu cache-friendly hale getirip 10x hızlandırmak." }, rust: { topic: "Benchmarking ve Profiling", tasks: ["criterion.rs ile benchmark", "cargo flamegraph", "LLVM IR okumaya giriş"], proj: "Kritik bir fonksiyonu optimize edip benchmarklamak." } },
+                { w: 22, c: { topic: "Test ve CI/CD", tasks: ["Unity veya CUnit ile test", "Makefile ile otomatik test", "GitHub Actions ile derleme"], proj: "C kütüphaneniz için otomatik test pipeline'ı." }, rust: { topic: "Testing Ekosistemi", tasks: ["cargo test", "Integration vs Unit tests", "Proptest (Property testing)"], proj: "Kapsamlı birim ve entegrasyon testleri yazmak." } },
+                { w: 23, c: { topic: "Final Projesi: C Tarafı", tasks: ["Proje mimarisi", "Modüler kod yapısı", "Dokümantasyon"], proj: "C ile yüksek performanslı bir CLI aracı veya Kütüphane." }, rust: { topic: "Final Projesi: Rust Tarafı", tasks: ["Ergonomik API tasarımı", "Error handling", "Crate publishing (crates.io)"], proj: "Rust ile modern, güvenli bir CLI aracı veya Servis." } },
+                { w: 24, c: { topic: "Entegrasyon ve Sunum", tasks: ["C ve Rust bileşenlerini birleştirme", "Final kod incelemesi (Code review)", "Performans karşılaştırması"], proj: "Hibrit C/Rust projesinin teslimi ve sunumu." }, rust: { topic: "Entegrasyon ve Sunum", tasks: ["FFI üzerinden veri alışverişi", "Bellek güvenliği raporunun yazılması", "Gelecek öğrenme haritası"], proj: "Hibrit C/Rust projesinin teslimi ve sunumu." } }
+            ]
+        }
+    ];
+
+    // --- RENDER ROADMAP ---
+    function renderRoadmap() {
+        const container = document.getElementById('roadmap-container');
+        let html = '';
+        let totalWeeks = 0;
+        let completedWeeks = parseInt(localStorage.getItem('completedWeeks') || '0');
+
+        roadmapData.forEach((month, mIdx) => {
+            html += `<h2>${month.month}</h2>`;
+            month.weeks.forEach((week, wIdx) => {
+                const globalIdx = mIdx * 4 + wIdx;
+                totalWeeks++;
+                const isDone = localStorage.getItem(`week-done-${globalIdx}`) === 'true';
+                
+                html += `
+                    <div class="week-card">
+                        <div class="week-header" onclick="toggleWeekContent(${globalIdx})">
+                            <span>Hafta ${week.w} ${isDone ? '<span style="color: var(--accent-success); font-size: 0.8rem; margin-left: 10px;">✓ TAMAMLANDI</span>' : ''}</span>
+                            <span style="color: var(--text-muted); font-size: 0.9rem;">Detayları Göster</span>
+                        </div>
+                        <div class="week-content" id="week-content-${globalIdx}">
+                            <div class="week-grid">
+                                <div class="lang-col c">
+                                    <h4>C Programlama</h4>
+                                    <p style="font-size: 0.9rem; color: var(--text-primary); margin-bottom: 8px; font-weight: 600;">${week.c.topic}</p>
+                                    <ul>${week.c.tasks.map(t => `<li>${t}</li>`).join('')}</ul>
+                                </div>
+                                <div class="lang-col rust">
+                                    <h4>Rust Programlama</h4>
+                                    <p style="font-size: 0.9rem; color: var(--text-primary); margin-bottom: 8px; font-weight: 600;">${week.rust.topic}</p>
+                                    <ul>${week.rust.tasks.map(t => `<li>${t}</li>`).join('')}</ul>
+                                </div>
+                            </div>
+                            <div class="project-box">
+                                <strong>Haftalık Teslim:</strong> ${week.c.proj} (C) &nbsp;|&nbsp; ${week.rust.proj} (Rust)
+                            </div>
+                            <button onclick="markComplete(${globalIdx}, this)" style="margin-top: 16px; padding: 8px 16px; background: ${isDone ? 'var(--bg-tertiary)' : 'var(--accent-success)'}; color: ${isDone ? 'var(--text-secondary)' : '#fff'}; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.85rem;">
+                                ${isDone ? 'Tamamlandı (Geri Al)' : 'Haftayı Tamamlandı Olarak İşaretle'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+        container.innerHTML = html;
+        updateProgress();
+    }
+
+    function toggleWeekContent(idx) {
+        const el = document.getElementById(`week-content-${idx}`);
+        el.classList.toggle('open');
+    }
+
+    function markComplete(idx, btn) {
+        const isDone = localStorage.getItem(`week-done-${idx}`) === 'true';
+        if (isDone) {
+            localStorage.removeItem(`week-done-${idx}`);
+        } else {
+            localStorage.setItem(`week-done-${idx}`, 'true');
+        }
+        renderRoadmap(); // Re-render to update UI and progress
+    }
+
+    function updateProgress() {
+        let done = 0;
+        for (let i = 0; i < 24; i++) {
+            if (localStorage.getItem(`week-done-${i}`) === 'true') done++;
+        }
+        const pct = Math.round((done / 24) * 100);
+        document.getElementById('c-progress-bar').style.width = pct + '%';
+        document.getElementById('c-progress-text').innerText = pct + '%';
+        document.getElementById('rust-progress-bar').style.width = pct + '%';
+        document.getElementById('rust-progress-text').innerText = pct + '%';
+    }
+
+    // --- JOURNAL LOGIC ---
+    const journalArea = document.getElementById('journal-area');
+    journalArea.value = localStorage.getItem('sysprog-journal') || '';
+    journalArea.addEventListener('input', () => {
+        localStorage.setItem('sysprog-journal', journalArea.value);
+    });
+
+    // --- INIT ---
+    renderRoadmap();
+</script>
+
+</body>
+</html>
